@@ -1,4 +1,4 @@
-import type { ReviewSummary } from "../../reviews/types";
+import type { ReviewSummary } from "../reviews/types";
 
 export interface ProfileHealthItem {
   id: string;
@@ -12,7 +12,11 @@ export interface ProfileHealth {
   items: ProfileHealthItem[];
 }
 
-export type StripeConnectState = "complete" | "incomplete" | "actionRequired" | "pending";
+export type StripeConnectState =
+  | "complete"
+  | "incomplete"
+  | "actionRequired"
+  | "pending";
 
 export interface StripeConnectStatus {
   state: StripeConnectState;
@@ -23,6 +27,8 @@ export type ActivityType =
   | "applicationReceived"
   | "applicationAccepted"
   | "applicationDeclined"
+  | "applicationWithdrawn"
+  | "applicationCancelled"
   | "concertSettled"
   | "reviewReceived"
   | "ticketSold"
@@ -56,16 +62,6 @@ export interface Settlement {
   direction: SettlementDirection;
 }
 
-export interface MessageThread {
-  id: number;
-  otherPartyName: string;
-  otherPartyAvatarUrl?: string;
-  preview: string;
-  at: string;
-  unread: boolean;
-  href: string;
-}
-
 export type DashboardApplicationStatus =
   | "pending"
   | "accepted"
@@ -91,7 +87,6 @@ export type { ReviewSummary };
 export interface ReviewExcerpt {
   id: number;
   reviewerName: string;
-  reviewerAvatarUrl?: string;
   stars: number;
   excerpt?: string;
   at: string;
