@@ -4,8 +4,8 @@
   "private": false,
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Concertable/concertable.git",
-    "directory": "app/shared"
+    "url": "git+https://github.com/Concertable/platform-frontend.git",
+    "directory": "packages/shared"
   },
   "type": "module",
   "main": "./dist/index.js",
@@ -16,6 +16,7 @@
   "scripts": {
     "clean": "node -e \"require('node:fs').rmSync('dist', { recursive: true, force: true })\"",
     "prebuild": "npm test",
+    "typecheck": "tsc -p tsconfig.build.json --noEmit",
     "build": "npm run clean && tsc -p tsconfig.build.json && tsc-alias -p tsconfig.build.json --resolve-full-paths --resolve-full-extension .js",
     "test": "vitest run src",
     "prepack": "npm run build"
@@ -152,7 +153,7 @@
     "react": ">=18.0.0"
   },
   "devDependencies": {
-    "@concertable/build-config": "*",
+    "@concertable/build-config": "^0.1.0",
     "@types/node": "^24.12.0",
     "@types/react": "^19.2.14",
     "tsc-alias": "^1.9.1",

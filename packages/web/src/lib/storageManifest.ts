@@ -30,14 +30,20 @@ export interface StorageItem {
   /** SPAs that store it: customer | venue | artist | business. */
   apps: readonly string[];
   /**
-   * Direct first-party write locations, relative to `app/web`, one entry per write
-   * occurrence. Omitted for items written through `createClassifiedStorage` (the accessor
-   * is their sole, sanctioned write site); present only for the consent substrate and
+   * Direct first-party write locations in this package, relative to the package root, one entry
+   * per write occurrence. Omitted for items written through `createClassifiedStorage` (the
+   * accessor is their sole, sanctioned write site); present only for the consent substrate and
    * library-driven writes (zustand `persist`) the accessor cannot mediate. The drift-guard
    * test asserts these match the code's actual direct writes — a new direct write fails
    * until it either routes through the accessor or is classified here.
    */
   writeSites?: readonly string[];
+  /**
+   * Write locations in another package, as `<package>:<path-from-that-package-root>`. The item is
+   * still declared here because the consent gate reads one manifest, but the drift guard cannot
+   * scan a tree this repository does not contain — the owning repository asserts these.
+   */
+  externalWriteSites?: readonly string[];
   notes?: string;
 }
 
@@ -51,7 +57,7 @@ export const STORAGE_MANIFEST: readonly StorageItem[] = [
     duration: "Persistent until cleared",
     classification: "necessary",
     apps: ["customer", "venue", "artist", "business", "admin"],
-    writeSites: ["shared/src/lib/consent.ts"],
+    writeSites: ["src/lib/consent.ts"],
   },
   {
     key: "theme",
@@ -73,8 +79,8 @@ export const STORAGE_MANIFEST: readonly StorageItem[] = [
     duration: "Persistent until cleared",
     classification: "functional",
     apps: ["venue", "artist"],
-    writeSites: [
-      "b2b/shared/src/features/tenant/webTenantSession.ts",
+    externalWriteSites: [
+      "@concertable/web-b2b:src/features/tenant/webTenantSession.ts",
     ],
     notes:
       "Written by the manager-web adapter for the cross-platform B2B tenant session.",

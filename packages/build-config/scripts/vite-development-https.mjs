@@ -2,7 +2,7 @@ import { spawnSync } from 'node:child_process'
 import { mkdirSync, readFileSync } from 'node:fs'
 import path from 'node:path'
 
-function runDevCertificateCommand(args: string[], failureMessage: string) {
+function runDevCertificateCommand(args, failureMessage) {
   const result = spawnSync('dotnet', ['dev-certs', 'https', ...args], {
     encoding: 'utf8',
     windowsHide: true,
@@ -21,7 +21,7 @@ function runDevCertificateCommand(args: string[], failureMessage: string) {
   throw new Error(details ? `${failureMessage}\n${details}` : failureMessage)
 }
 
-export function aspNetDevelopmentHttps(cacheDirectory: string) {
+export function aspNetDevelopmentHttps(cacheDirectory) {
   runDevCertificateCommand(
     ['--check', '--trust'],
     'Concertable frontend HTTPS requires a trusted ASP.NET development certificate. Run: dotnet dev-certs https --trust',

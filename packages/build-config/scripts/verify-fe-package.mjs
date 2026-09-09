@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
@@ -76,14 +77,18 @@ const CHECKS = {
     node: [
       'import { sourceAlias } from "@concertable/build-config/vite";',
       'import { nodeTests } from "@concertable/build-config/vitest";',
+      'import { aspNetDevelopmentHttps } from "@concertable/build-config/vite-development-https";',
       'if (sourceAlias(".").find !== "@") throw new Error("Unexpected Vite alias");',
       'if (nodeTests(".").test.environment !== "node") throw new Error("Unexpected Vitest environment");',
+      'if (typeof aspNetDevelopmentHttps !== "function") throw new Error("Missing dev-certificate helper");',
     ],
     nodeRuntime: [
       'import { sourceAlias } from "@concertable/build-config/vite";',
       'import { nodeTests } from "@concertable/build-config/vitest";',
+      'import { aspNetDevelopmentHttps } from "@concertable/build-config/vite-development-https";',
       'if (sourceAlias(".").find !== "@") throw new Error("Unexpected Vite alias");',
       'if (nodeTests(".").test.environment !== "node") throw new Error("Unexpected Vitest environment");',
+      'if (typeof aspNetDevelopmentHttps !== "function") throw new Error("Missing dev-certificate helper");',
     ],
     commonJsRuntime: [
       'const createDependencyCruiserConfig = require("@concertable/build-config/dependency-cruiser");',

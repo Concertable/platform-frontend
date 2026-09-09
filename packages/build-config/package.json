@@ -7,23 +7,49 @@
     "*.cjs",
     "*.d.mts",
     "*.mjs",
-    "*.json"
+    "*.json",
+    "scripts"
   ],
+  "bin": {
+    "check-fe-boundaries": "./scripts/check-fe-boundaries.mjs",
+    "patch-nativewind": "./scripts/patch-nativewind.cjs",
+    "verify-fe-package": "./scripts/verify-fe-package.mjs"
+  },
   "exports": {
     "./dependency-cruiser": "./dependency-cruiser.cjs",
     "./metro": "./metro.cjs",
     "./typescript": "./tsconfig.json",
     "./vite": "./vite.mjs",
+    "./vite-development-https": {
+      "types": "./scripts/vite-development-https.d.mts",
+      "import": "./scripts/vite-development-https.mjs",
+      "default": "./scripts/vite-development-https.mjs"
+    },
     "./vitest": "./vitest.mjs",
     "./package.json": "./package.json"
   },
+  "scripts": {
+    "test": "node --test scripts"
+  },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Concertable/concertable.git",
-    "directory": "app/build-config"
+    "url": "git+https://github.com/Concertable/platform-frontend.git",
+    "directory": "packages/build-config"
   },
   "publishConfig": {
     "access": "restricted",
     "registry": "https://npm.pkg.github.com"
+  },
+  "peerDependencies": {
+    "dependency-cruiser": "^17.4.3",
+    "typescript": "~5.9.3"
+  },
+  "peerDependenciesMeta": {
+    "dependency-cruiser": {
+      "optional": true
+    },
+    "typescript": {
+      "optional": true
+    }
   }
 }

@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  pull_request:
+  merge_group:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  node:
+    uses: Concertable/.github/.github/workflows/node-ci.yml@a2f574a1f4fad3df5e3ec8aa0dd552d717c95728
+    with:
+      working-directory: .
+      node-version: '22'
+    permissions:
+      contents: read
+      packages: read
+
+  ci-complete:
+    name: ci-complete
+    needs: [node]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require every gate to have succeeded
+        run: |
+          result='${{ needs.node.result }}'
+          echo "node: $result"
+          [ "$result" = 'success' ]
