@@ -1,13 +1,54 @@
+#!/usr/bin/env node
 import { spawnSync } from "node:child_process";
-import { readFileSync, readdirSync } from "node:fs";
-import { dirname, join } from "node:path";
-import { fileURLToPath } from "node:url";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
+import { createRequire } from "node:module";
+import { dirname, isAbsolute, join, resolve } from "node:path";
 import ts from "typescript";
-import workspaceConfiguration from "../workspaces.cjs";
 
-const appRoot = dirname(dirname(fileURLToPath(import.meta.url)));
-const executable = join(appRoot, "node_modules", "dependency-cruiser", "bin", "dependency-cruise.mjs");
-const { workspaces } = workspaceConfiguration;
+// This ships from @concertable/build-config, so the tree being linted is the caller's, never this
+// package's own directory: both the root and the workspace declaration have to be passed in.
+//
+//   node check-fe-boundaries.mjs [--root <directory>] [--workspaces <file>]
+//
+// --root defaults to the working directory and --workspaces to <root>/workspaces.cjs.
+const argv = process.argv.slice(2);
+
+function option(name, fallback) {
+  const index = argv.indexOf(`--${name}`);
+  if (index === -1) {
+    return fallback;
+  }
+  const value = argv[index + 1];
+  if (!value || value.startsWith("--")) {
+    throw new Error(`--${name} requires a value`);
+  }
+  return value;
+}
+
+const appRoot = resolve(option("root", process.cwd()));
+const workspacesPath = option("workspaces", join(appRoot, "workspaces.cjs"));
+const executable = dependencyCruiseExecutable(appRoot);
+const { workspaces } = createRequire(join(appRoot, "package.json"))(
+  isAbsolute(workspacesPath) ? workspacesPath : resolve(appRoot, workspacesPath),
+);
+
+// Walked rather than resolved: dependency-cruiser's "." export is import-only, so require.resolve
+// cannot see it, and the executable is not an export at all. Walking node_modules the way Node would
+// still lets a nested tree find the copy its ancestors installed.
+function dependencyCruiseExecutable(fromDirectory) {
+  let directory = fromDirectory;
+  for (;;) {
+    const candidate = join(directory, "node_modules", "dependency-cruiser", "bin", "dependency-cruise.mjs");
+    if (existsSync(candidate)) {
+      return candidate;
+    }
+    const parent = dirname(directory);
+    if (parent === directory) {
+      throw new Error(`Could not find dependency-cruiser in any node_modules above ${fromDirectory}`);
+    }
+    directory = parent;
+  }
+}
 
 const bareFeatureEntryPoint = /^@concertable\/[^/]+\/features\/[^/]+$/;
 const featureTypesEntryPoint = /^@concertable\/[^/]+\/features\/[^/]+\/types$/;

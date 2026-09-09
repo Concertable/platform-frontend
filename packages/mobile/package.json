@@ -4,8 +4,8 @@
   "private": false,
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Concertable/concertable.git",
-    "directory": "app/mobile/shared"
+    "url": "git+https://github.com/Concertable/platform-frontend.git",
+    "directory": "packages/mobile"
   },
   "type": "module",
   "files": [
@@ -16,6 +16,7 @@
   ],
   "scripts": {
     "clean": "node -e \"require('node:fs').rmSync('dist', { recursive: true, force: true })\"",
+    "typecheck": "tsc -p tsconfig.build.json --noEmit",
     "build": "npm run clean && tsc -p tsconfig.build.json && tsc-alias -p tsconfig.build.json --resolve-full-paths --resolve-full-extension .js",
     "prepack": "npm run build"
   },
@@ -34,7 +35,7 @@
     "registry": "https://npm.pkg.github.com"
   },
   "dependencies": {
-    "@concertable/shared": "*",
+    "@concertable/shared": "^0.1.0",
     "@gorhom/bottom-sheet": "^5.2.14",
     "@microsoft/signalr": "^10.0.0",
     "@react-navigation/native": "^7.1.6",

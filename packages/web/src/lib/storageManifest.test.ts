@@ -4,16 +4,18 @@ import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { STORAGE_MANIFEST, type StorageApi } from "./storageManifest";
 
-const APP_WEB_DIR = path.resolve(
+// This package's own root: the guard can only speak for the tree this repository contains, and
+// `externalWriteSites` records the writes another package owns.
+const PACKAGE_DIR = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
-  "../../..",
+  "../..",
 );
 
 // The sanctioned first-party write home. createClassifiedStorage resolves its Storage handle
 // dynamically, so its own write isn't scanned; excluding this module also covers any raw write it
 // later needs. Every other raw write must route through the accessor or be a declared
 // library/substrate site — so a new raw write elsewhere fails the guard, not detected after the fact.
-const ACCESSOR_MODULE = "shared/src/lib/classifiedStorage.ts";
+const ACCESSOR_MODULE = "src/lib/classifiedStorage.ts";
 
 const SKIP_DIRS = new Set([
   "node_modules",
@@ -65,10 +67,10 @@ function sourceFiles(dir: string): string[] {
 
 function scannedWrites(): string[] {
   const tokens: string[] = [];
-  for (const file of sourceFiles(APP_WEB_DIR)) {
+  for (const file of sourceFiles(PACKAGE_DIR)) {
     const content = readFileSync(file, "utf8");
     const relative = path
-      .relative(APP_WEB_DIR, file)
+      .relative(PACKAGE_DIR, file)
       .split(path.sep)
       .join("/");
     for (const { api, regex } of WRITE_PATTERNS) {
@@ -105,7 +107,7 @@ describe("storage manifest drift guard", () => {
     const undeclared = multisetDiff(directWrites, declaredWrites());
     expect(
       undeclared,
-      `Unclassified direct storage write(s). Route first-party writes through createClassifiedStorage, or — for a library/substrate write the accessor cannot mediate — add it to STORAGE_MANIFEST in app/web/shared/src/lib/storageManifest.ts with its owner/purpose/duration/classification and a writeSites entry (file|api):\n${undeclared.join("\n")}`,
+      `Unclassified direct storage write(s). Route first-party writes through createClassifiedStorage, or — for a library/substrate write the accessor cannot mediate — add it to STORAGE_MANIFEST in src/lib/storageManifest.ts with its owner/purpose/duration/classification and a writeSites entry (file|api):\n${undeclared.join("\n")}`,
     ).toEqual([]);
   });
 
