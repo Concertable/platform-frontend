@@ -1,12 +1,12 @@
-# app/web/shared — code shared across the web SPAs
+# `packages/web` — `@concertable/web`, code shared across the web SPAs
 
 Inherits [`../../AGENTS.md`](../../AGENTS.md) (frontend conventions + patterns).
 
 ## Everything here compiles into EVERY web app. Nothing app-specific goes here. Ever.
 
 Concertable is two products. Code shared by the two manager apps but not the customer app —
-opportunities, contracts, applications, payouts — belongs in `app/web/b2b/shared`
-(see [its `AGENTS.md`](../b2b/shared/AGENTS.md)), never here. This tree is for what is genuinely universal: design system,
+opportunities, contracts, applications, payouts — belongs in `@concertable/web-b2b`,
+which the B2B product repository owns, never here. This tree is for what is genuinely universal: design system,
 auth/search/messaging infrastructure, and the details views every site renders.
 
 The five SPAs (customer, venue, artist, business, admin) are fully separate sites: separate OIDC clients,

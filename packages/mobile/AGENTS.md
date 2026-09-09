@@ -1,10 +1,10 @@
-# app/mobile/shared — `@concertable/mobile`, code shared across the mobile apps
+# `packages/mobile` — `@concertable/mobile`, code shared across the mobile apps
 
 Inherits [`../../AGENTS.md`](../../AGENTS.md) (frontend conventions + patterns).
 
 ## Everything here compiles into BOTH mobile apps (b2b + customer). Nothing web-only, nothing single-app, goes here.
 
-Published as package `@concertable/mobile`, the mobile counterpart of `app/web/shared`: design
+Published as package `@concertable/mobile`, the mobile counterpart of `@concertable/web`: design
 system (NativeWind theme), navigation shell, auth/search/messaging infrastructure, and the
 concert/venue/artist detail views every mobile app renders. B2B-only concepts (opportunities,
 contracts, applications, payouts) have no home here — the mobile b2b app has no shared-with-customer
@@ -17,7 +17,7 @@ whole product, not two.
   shared fluent builder in the `http-layer` skill, "The four HTTP
   clients") — never wired into the bare `lib/*Client.ts` instance.
 - **Identity rule** — no product-conditional branching here (`isVenueManager`, tenant-type checks).
-  Same slot/prop injection pattern as `app/web/shared` — the owning app decides, this tier renders
+  Same slot/prop injection pattern as `@concertable/web` — the owning app decides, this tier renders
   what it's given.
 - **Auth is token storage, not a browser OIDC flow.** `auth/tokenStorage.ts` +
   `auth/getValidAccessToken.ts` are the mobile equivalent of the web `userManager`; there is no
