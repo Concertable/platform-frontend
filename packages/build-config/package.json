@@ -40,6 +40,9 @@
     "access": "restricted",
     "registry": "https://npm.pkg.github.com"
   },
+  "dependencies": {
+    "@types/node": "^24.12.0"
+  },
   "peerDependencies": {
     "dependency-cruiser": "^17.4.3",
     "typescript": "~5.9.3"
