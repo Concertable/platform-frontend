@@ -17,7 +17,7 @@
     "release": "changeset publish"
   },
   "devDependencies": {
-    "@changesets/cli": "^2.29.7",
+    "@changesets/cli": "^3.0.2",
     "dependency-cruiser": "^17.4.3",
     "expo": "~54.0.33",
     "react": "19.1.0",
@@ -63,6 +63,6 @@
     }
   },
   "engines": {
-    "node": ">=22"
+    "node": ">=22.11"
   }
 }

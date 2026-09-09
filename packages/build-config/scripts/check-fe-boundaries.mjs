@@ -25,16 +25,8 @@ function option(name, fallback) {
   return value;
 }
 
-const appRoot = resolve(option("root", process.cwd()));
-const workspacesPath = option("workspaces", join(appRoot, "workspaces.cjs"));
-const executable = dependencyCruiseExecutable(appRoot);
-const { workspaces } = createRequire(join(appRoot, "package.json"))(
-  isAbsolute(workspacesPath) ? workspacesPath : resolve(appRoot, workspacesPath),
-);
-
-// Walked rather than resolved: dependency-cruiser's "." export is import-only, so require.resolve
-// cannot see it, and the executable is not an export at all. Walking node_modules the way Node would
-// still lets a nested tree find the copy its ancestors installed.
+// dependency-cruiser's "." export is import-only, so require.resolve cannot see it, and the
+// executable is not an export at all.
 function dependencyCruiseExecutable(fromDirectory) {
   let directory = fromDirectory;
   for (;;) {
@@ -49,6 +41,13 @@ function dependencyCruiseExecutable(fromDirectory) {
     directory = parent;
   }
 }
+
+const appRoot = resolve(option("root", process.cwd()));
+const workspacesPath = option("workspaces", join(appRoot, "workspaces.cjs"));
+const executable = dependencyCruiseExecutable(appRoot);
+const { workspaces } = createRequire(join(appRoot, "package.json"))(
+  isAbsolute(workspacesPath) ? workspacesPath : resolve(appRoot, workspacesPath),
+);
 
 const bareFeatureEntryPoint = /^@concertable\/[^/]+\/features\/[^/]+$/;
 const featureTypesEntryPoint = /^@concertable\/[^/]+\/features\/[^/]+\/types$/;
