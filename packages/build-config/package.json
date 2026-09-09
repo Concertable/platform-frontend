@@ -41,7 +41,7 @@
     "registry": "https://npm.pkg.github.com"
   },
   "dependencies": {
-    "@types/node": "^24.12.0"
+    "@types/node": ">=20"
   },
   "peerDependencies": {
     "dependency-cruiser": "^17.4.3",
