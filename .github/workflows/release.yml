@@ -38,12 +38,12 @@ jobs:
 
       - name: Install
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.CONCERTABLE_PACKAGES_TOKEN }}
         run: npm ci
 
       - name: Verify before releasing
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.CONCERTABLE_PACKAGES_TOKEN }}
         run: |
           npm run lint
           npm run typecheck
@@ -61,14 +61,14 @@ jobs:
           pr-title: 'chore(release): version the frontend platform tiers'
           commit-message: 'chore(release): version the frontend platform tiers'
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.CONCERTABLE_PACKAGES_TOKEN }}
 
       # The org's npm-publish.yml only proves a packed tarball installs. These tiers state Metro and
       # NativeWind resolution against a built dist as their boundary, which is what this proves.
       - name: Verify the published tiers from the feed
         if: steps.changesets.outputs.published == 'true'
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.CONCERTABLE_PACKAGES_TOKEN }}
           PUBLISHED: ${{ steps.changesets.outputs.published-packages }}
         run: |
           set -euo pipefail
