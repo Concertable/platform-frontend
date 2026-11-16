@@ -44,7 +44,7 @@
       "js-yaml": "^3.15.0"
     },
     "@expo/cli": {
-      "ws": "^8.21.0"
+      "ws": "^7.5.13"
     },
     "@microsoft/signalr": {
       "ws": "^7.5.11"
@@ -56,10 +56,10 @@
       "ws": "^7.5.11"
     },
     "@react-native/dev-middleware": {
-      "ws": "^6.2.4"
+      "ws": "^7.5.13"
     },
     "react-native": {
-      "ws": "^6.2.4"
+      "ws": "^7.5.13"
     }
   },
   "engines": {
