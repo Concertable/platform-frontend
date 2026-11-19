@@ -16,7 +16,7 @@ concurrency:
 
 jobs:
   node:
-    uses: Concertable/pipeline/.github/workflows/node-ci.yml@a2f574a1f4fad3df5e3ec8aa0dd552d717c95728
+    uses: Concertable/pipeline/.github/workflows/node-ci.yml@05fc78236b934d4cc4df6e61aa73d051f86887cb
     with:
       working-directory: .
       node-version: '22'
