@@ -137,7 +137,7 @@
     "dayjs": "^1.11.20",
     "embla-carousel-react": "^8",
     "framer-motion": "^12",
-    "lucide-react": "^0.468",
+    "lucide-react": "^0.577.0",
     "oidc-client-ts": "^3.5.0",
     "radix-ui": "^1",
     "react-day-picker": "^9",
